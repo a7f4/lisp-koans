@@ -42,6 +42,9 @@
     "make your own array that meets the specifications below."
   (let ((color-cube (make-array '(3 3 3))))
     "you may need to modify your array after you make it"
+    (setf color-cube (make-array '(3 3 3)))
+    (setf (aref color-cube 0 1 2) :red)
+    (setf (aref color-cube 2 1 0 ) :white)
     (if (typep color-cube '(simple-array T (3 3 3)))
         (progn
 	  (setf (aref color-cube 0 1 2) :red)
@@ -78,4 +81,4 @@
     (dotimes (i (* 2 2 2 2))
       (setf (row-major-aref my-array i) i))
     (assert-equal (aref my-array 0 0 0 0) 0)
-    (assert-equal (aref my-array 1 1 1 1) 15)))
+    (assert-equal (aref my-array 1 1 1 0) 14)))

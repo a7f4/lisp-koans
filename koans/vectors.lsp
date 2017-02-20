@@ -15,13 +15,13 @@
 "vectors are just like rank 1 arrays"
 
 (define-test test-vector-types
-    " #(x y z) defines a vector literal containing x y z"
+  " #(x y z) defines a vector literal containing x y z"
   (true-or-false? t (typep #(1 11 111) 'vector))
   (assert-equal 11 (aref #(1 11 111) 1)))
 
 
 (define-test test-length-works-on-vectors
-    (assert-equal (length #(1 2 3)) 3 ))
+  (assert-equal (length #(1 2 3)) 3 ))
 
 
 (define-test test-bit-vector
@@ -33,12 +33,12 @@
 
 (define-test test-some-bitwise-operations
     (assert-equal #*1000 (bit-and #*1100 #*1010))
-  (assert-equal #*1110 (bit-ior #*1100 #*1010))
-  (assert-equal #*0110 (bit-xor #*1100 #*1010)))
+    (assert-equal #*1110 (bit-ior #*1100 #*1010))
+    (assert-equal #*0110 (bit-xor #*1100 #*1010)))
 
 
 (defun list-to-bit-vector (my-list)
-  (make-array (length my-list) :element-type 'bit :initial-contents my-list))
+    (make-array (length my-list) :element-type 'bit :initial-contents my-list))
 
 (define-test test-list-to-bit-vector
     "you must complete list-to-bit-vector"

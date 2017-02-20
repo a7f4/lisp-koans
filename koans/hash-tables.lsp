@@ -30,18 +30,18 @@
     "gethash is for accessing hash tables"
   (let ((table-of-cube-roots (make-hash-table)))
 
-    "assign the key-value pair 1->'uno'"
-    (setf (gethash 1 table-of-cube-roots) "uno")
-    (assert-equal "uno" (gethash 1 table-of-cube-roots))
-    (assert-equal 1 (hash-table-count table-of-cube-roots))
+  "assign the key-value pair 1->'uno'"
+  (setf (gethash 1 table-of-cube-roots) "uno")
+  (assert-equal "uno" (gethash 1 table-of-cube-roots))
+  (assert-equal 1 (hash-table-count table-of-cube-roots))
 
-    (setf (gethash 8 table-of-cube-roots) 2)
-    (setf (gethash -3 table-of-cube-roots) -27)
-    (assert-equal -27 (gethash -3 table-of-cube-roots))
-    (assert-equal 3 (hash-table-count table-of-cube-roots))
+  (setf (gethash 8 table-of-cube-roots) 2)
+  (setf (gethash -3 table-of-cube-roots) -27)
+  (assert-equal -27 (gethash -3 table-of-cube-roots))
+  (assert-equal 3 (hash-table-count table-of-cube-roots))
 
-    "accessing unset keys returns nil"
-    (assert-equal nil (gethash 125 table-of-cube-roots))))
+  "accessing unset keys returns nil"
+  (assert-equal nil (gethash 125 table-of-cube-roots))))
 
 
 (define-test test-hash-key-equality
@@ -109,19 +109,22 @@
       (setf value-and-exists (multiple-value-list (gethash "Obama" prev-pres)))
       (assert-equal value-and-exists '("Bush" t))
       (setf value-and-exists (multiple-value-list (gethash "Lincoln" prev-pres)))
-      (assert-equal value-and-exists ____)
+      (assert-equal value-and-exists '("Buchanan" t))
       (setf value-and-exists (multiple-value-list (gethash "Washington" prev-pres)))
-      (assert-equal value-and-exists ____)
+      (assert-equal value-and-exists '(nil t))
       (setf value-and-exists (multiple-value-list (gethash "Franklin" prev-pres)))
-      (assert-equal value-and-exists ____)))
+      (assert-equal value-and-exists '(nil nil))))
 
 
 (define-test test-make-your-own-hash-table
     "make a hash table that meets the following conditions"
-  (let ((colors (make-hash-table))
-        values)
+  (let ((colors (make-hash-table :test #'equal ))
+        (values nil) )
+    (setf (gethash "blue" colors) '(0 0 1))
+    (setf (gethash "green" colors) '(0 1 0))
+    (setf (gethash "red" colors) '(1 0 0))
 
-    (assert-equal (hash-table-count colors) 4)
+    (assert-equal (hash-table-count colors) 3)
     (setf values (list (gethash "blue" colors)
                        (gethash "green" colors)
                        (gethash "red" colors)))
