@@ -20,38 +20,73 @@
 
 ;; Modified from Ruby Koans: about_scoring_project.rb
 
-; *Greed* is a dice game where you roll up to five dice to accumulate
-; points.  The following "score" function will be used to calculate the
-; score of a single roll of the dice.
-;
-; A greed roll is scored as follows:
-;
-; * A set of three ones is 1000 points
-;
-; * A set of three numbers (other than ones) is worth 100 times the
-;   number. (e.g. three fives is 500 points).
-;
-; * A one (that is not part of a set of three) is worth 100 points.
-;
-; * A five (that is not part of a set of three) is worth 50 points.
-;
-; * Everything else is worth 0 points.
-;
-;
-; Examples:
-;
-; (score '(1 1 1 5 1)) => 1150 points
-; (score '(2 3 4 6 2)) => 0 points
-; (score '(3 4 5 3 3)) => 350 points
-; (score '(1 5 1 2 4)) => 250 points
-;
-; More scoring examples are given in the tests below:
-;
-; Your goal is to write the score method.
+					; *Greed* is a dice game where you roll up to five dice to accumulate
+					; points.  The following "score" function will be used to calculate the
+					; score of a single roll of the dice.
+					;
+					; A greed roll is scored as follows:
+					;
+					; * A set of three ones is 1000 points
+					;
+					; * A set of three numbers (other than ones) is worth 100 times the
+					;   number. (e.g. three fives is 500 points).
+					;
+					; * A one (that is not part of a set of three) is worth 100 points.
+					;
+					; * A five (that is not part of a set of three) is worth 50 points.
+					;
+					; * Everything else is worth 0 points.
+					;
+					;
+					; Examples:
+					;
+					; (score '(1 1 1 5 1)) => 1150 points
+					; (score '(2 3 4 6 2)) => 0 points
+					; (score '(3 4 5 3 3)) => 350 points
+					; (score '(1 5 1 2 4)) => 250 points
+					;
+					; More scoring examples are given in the tests below:
+					;
+					; Your goal is to write the score method.
+
+(defun tokenize (dice)
+  (labels ((tokenize-inner (lst result)
+	     (let ((frst (first lst)))
+	       (cond ((null lst) result)
+		     (t (progn
+			  (if (null (gethash frst result))
+			      (setf (gethash frst result) 1)
+			      (incf (gethash frst result)))
+			  (tokenize-inner (cdr lst) result)
+			  )
+			)
+		     )
+	       )))
+    (loop for value being the hash-values of (tokenize-inner dice (make-hash-table))
+       using (hash-key key)
+       collect (cons key value))
+    )
+  )
 
 (defun score (dice)
-  ; You need to write this method
-)
+  (labels ((score-inner (token)
+	     (labels ((score-of-three (a)
+			(cond ((= a 1) 1000)
+			      (t (* 100 a))))
+		      (score-rest (a n)
+			(cond ((= a 1) (* 100 n))
+			      ((= a 5) (* 50 n))
+			      (t 0))
+			))
+	       (let* ((n (cdr token))
+		      (n-3 (- n 3))
+		      (a (car token)))
+
+		 (if (>= n-3 0)
+		     (+ (score-of-three a) (score-rest a n-3))
+		     (score-rest a n))))))
+    (loop for x in (tokenize dice)
+       sum (score-inner x))))
 
 (define-test test-score-of-an-empty-list-is-zero
     (assert-equal 0 (score nil)))
